@@ -714,10 +714,13 @@ function renderAttendees(count){
       <div class="idx">Attendee ${i}</div>
       <div class="grid2">
         <div><label>Guest Name ${i===1?'<span class="req">*</span>':''}</label><input type="text" class="att-name" data-idx="${i}"></div>
-        <div><label>Mobile Number ${i===1?'<span class="req">*</span>':''}</label><input type="tel" class="att-mobile" data-idx="${i}" maxlength="10"></div>
+        <div>
+          <label>Mobile Number ${i===1?'<span class="req">*</span>':''}</label>
+          <input type="tel" class="att-mobile" data-idx="${i}" maxlength="10">
+          <div class="field-error att-mobile-error" data-idx="${i}">Enter a valid 10-digit mobile number</div>
+        </div>
       </div>
       ${includeEmail ? `<label>Email ID</label><input type="email" class="att-email" data-idx="${i}">` : ''}
-      <div class="field-error att-mobile-error" data-idx="${i}">Enter a valid 10-digit mobile number</div>
       <label>Dietary Preference <span class="hint">(for lunch headcount)</span></label>
       <select class="att-diet" data-idx="${i}">
         <option value="Veg">Vegetarian</option>
