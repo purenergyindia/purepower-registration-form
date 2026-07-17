@@ -727,7 +727,7 @@ function renderAttendees(count){
   list.innerHTML = '';
   const step3ErrorEl = document.getElementById('step3Error');
   if(step3ErrorEl) step3ErrorEl.classList.remove('show');
-  const includeEmail = state.partnerType !== 'Distributor'; // Dealer / Authorised Retailer / Business Associate capture email too
+  const includeEmail = true; // Email ID is captured for every attendee, regardless of partner type
   for(let i=1;i<=count;i++){
     const block = document.createElement('div');
     block.className = 'attendee-block';
