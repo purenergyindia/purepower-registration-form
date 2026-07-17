@@ -238,6 +238,13 @@
   }
   .success h2{font-size:20px;margin-bottom:6px;}
   .success p{color:var(--ink-soft);font-size:14px;line-height:1.6;max-width:420px;margin:0 auto;}
+  .reg-id-box{
+    display:inline-flex;flex-direction:column;align-items:center;gap:4px;
+    margin:20px auto 4px;padding:14px 26px;border-radius:14px;
+    background:var(--green-soft);border:1.5px dashed var(--green-deep);
+  }
+  .reg-id-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--green-deep);}
+  .reg-id-value{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--ink);letter-spacing:0.03em;}
   .receipt{
     text-align:left;background:var(--bg);border:1px solid var(--line);border-radius:12px;
     padding:16px;margin-top:20px;font-size:12.5px;
@@ -319,10 +326,8 @@
       <h2>Who's Registering?</h2>
       <p class="desc">Select your partner category. This is strictly for Authorized Channel Partners of PuREPower.</p>
       <div class="tiles" id="partnerTiles">
-        <div class="tile" data-type="Distributor"><div class="dot"></div><div class="name">Distributor</div></div>
-        <div class="tile" data-type="Dealer"><div class="dot"></div><div class="name">Dealer</div></div>
-        <div class="tile" data-type="Authorised Retailer"><div class="dot"></div><div class="name">Authorised Retailer</div></div>
-        <div class="tile" data-type="Business Prospect"><div class="dot"></div><div class="name">Business Prospect</div></div>
+        <div class="tile" data-type="Channel Partner"><div class="dot"></div><div class="name">Channel Partner</div></div>
+        <div class="tile" data-type="Business Associate"><div class="dot"></div><div class="name">Business Associate</div></div>
       </div>
     </div>
 
@@ -330,16 +335,16 @@
     <div class="card" id="step2" style="display:none;">
       <div class="step-tag">Step 2</div>
       <h2 id="step2Title">Confirm Your Partner Details</h2>
-      <p class="desc" id="step2Desc">Enter your Dealer Code — your firm's details will be pulled up automatically.</p>
+      <p class="desc" id="step2Desc">Enter your Channel Partner Code — your firm's details will be pulled up automatically.</p>
 
       <div id="codeSection">
-        <label id="dealerCodeLabel">Dealer Code <span class="req">*</span></label>
+        <label id="dealerCodeLabel">Channel Partner Code <span class="req">*</span></label>
         <div class="code-row">
           <input type="text" id="dealerCode" placeholder="" maxlength="14">
         </div>
         <div class="verify-status idle" id="verifyStatus">
           <span class="dot-pulse" style="background:var(--ink-soft);"></span>
-          <span>Enter your Dealer Code to auto-fill your firm's details</span>
+          <span>Enter your Channel Partner Code to auto-fill your firm's details</span>
         </div>
       </div>
 
@@ -368,7 +373,7 @@
         </div>
       </div>
 
-      <!-- Business Prospect-only manual fields -->
+      <!-- Business Associate-only manual fields -->
       <div id="prospectSection" style="display:none;">
         <label>Firm / Company Name <span class="req">*</span></label>
         <input type="text" id="pCompany">
@@ -389,8 +394,11 @@
           </div>
         </div>
 
-        <label>Who Was Your Point of Contact (PoC) for the Channel Partner Registration?</label>
+        <label>Point of Contact Full Name <span class="hint">(for your Channel Partner Registration)</span></label>
         <input type="text" id="pocName" placeholder="Name of the PURE Energy contact">
+
+        <label>Official Email ID of the Point of Contact</label>
+        <input type="email" id="pocEmail" placeholder="poc@pureenergy.co.in">
 
         <label>Have You Already Applied for Channel Partner Registration? <span class="req">*</span></label>
         <div class="tiles" style="grid-template-columns:1fr 1fr;">
@@ -456,7 +464,7 @@
 
       <div class="decl" style="margin-top:16px;">
         <input type="checkbox" id="declCheck">
-        <span>I confirm I am an Authorized Channel Partner of PuREPower (or a business prospect invited by PURE Energy) and will attend the full-day workshop on Saturday, 22 August 2026.</span>
+        <span>I confirm I am an Authorized Channel Partner of PuREPower (or a business associate invited by PURE Energy) and will attend the full-day workshop on Saturday, 22 August 2026.</span>
       </div>
 
       <div class="btn-row">
@@ -474,6 +482,10 @@
     </div>
     <h2>Seat Confirmed</h2>
     <p>Your registration for the PuREPower Channel Partner Workshop 2026 has been recorded. A confirmation will be sent to your official email shortly.</p>
+    <div class="reg-id-box">
+      <span class="reg-id-label">Your Registration ID</span>
+      <span class="reg-id-value" id="regIdValue"></span>
+    </div>
     <div class="receipt" id="finalReceipt"></div>
   </div>
 
@@ -493,7 +505,7 @@ const SEAT_LIMIT = {
   "Distributor": 4,
   "Dealer": 2,
   "Authorised Retailer": 1,
-  "Business Prospect": 1,
+  "Business Associate": 1,
   "Cash & Carry": 1
 };
 
@@ -503,7 +515,22 @@ let state = {
   matchedRecord: null,
   attendees: [],
   applied: null,
+  registrationId: null,
 };
+
+const REG_ID_PREFIX = {
+  "Distributor": "DS",
+  "Dealer": "DE",
+  "Authorised Retailer": "AR",
+  "Business Associate": "BA",
+  "Cash & Carry": "CC"
+};
+
+function generateRegistrationId(partnerType){
+  const prefix = REG_ID_PREFIX[partnerType] || "PP";
+  const rand = Math.floor(100000 + Math.random() * 900000); // 6-digit random number
+  return prefix + rand;
+}
 
 // ---- Step 1: tile selection ----
 document.querySelectorAll('#partnerTiles .tile').forEach(t=>{
@@ -535,32 +562,26 @@ function goStep(n){
 }
 
 // ---- Step 2 ----
-const CODE_LABEL_BY_TYPE = {
-  "Distributor": "Distributor Code",
-  "Dealer": "Dealer Code",
-  "Authorised Retailer": "Authorised Retailer Code"
-};
-
 function getCodeLabel(){
-  return CODE_LABEL_BY_TYPE[state.partnerType] || 'Dealer Code';
+  return 'Channel Partner Code';
 }
 
 function prepStep2(){
-  const isProspect = state.partnerType === 'Business Prospect';
-  document.getElementById('codeSection').style.display = isProspect ? 'none' : 'block';
-  document.getElementById('prospectSection').style.display = isProspect ? 'block' : 'none';
+  const isAssociate = state.partnerType === 'Business Associate';
+  document.getElementById('codeSection').style.display = isAssociate ? 'none' : 'block';
+  document.getElementById('prospectSection').style.display = isAssociate ? 'block' : 'none';
   document.getElementById('partnerPanel').classList.remove('show');
-  document.getElementById('step2Title').innerText = isProspect
+  document.getElementById('step2Title').innerText = isAssociate
     ? 'Tell Us About Your Business'
     : 'Confirm Your Partner Details';
 
   const codeLabel = getCodeLabel();
   document.getElementById('dealerCodeLabel').innerHTML = codeLabel + ' <span class="req">*</span>';
-  document.getElementById('step2Desc').innerText = isProspect
+  document.getElementById('step2Desc').innerText = isAssociate
     ? 'Since you are not yet an authorized partner, enter your business details manually.'
     : 'Enter your ' + codeLabel + ' — your firm details will be pulled up automatically.';
 
-  if(!isProspect){
+  if(!isAssociate){
     document.getElementById('dealerCode').value = '';
     const status = document.getElementById('verifyStatus');
     status.className = 'verify-status idle';
@@ -569,7 +590,7 @@ function prepStep2(){
 
   document.getElementById('step2Next').disabled = true;
 
-  if(isProspect){
+  if(isAssociate){
     validateProspect();
   }
 }
@@ -585,7 +606,7 @@ document.querySelectorAll('.choice-tile').forEach(t=>{
   });
 });
 
-['pCompany','pCity','pState','pEmail','pPhone','pocName','investTimeline','investAmount'].forEach(id=>{
+['pCompany','pCity','pState','pEmail','pPhone','pocName','pocEmail','investTimeline','investAmount'].forEach(id=>{
   const el = document.getElementById(id);
   if(el) el.addEventListener('input', validateProspect);
 });
@@ -595,7 +616,7 @@ document.getElementById('pPhone').addEventListener('input', function(e){
 });
 
 function validateProspect(){
-  if(state.partnerType !== 'Business Prospect') return;
+  if(state.partnerType !== 'Business Associate') return;
   const company = document.getElementById('pCompany').value.trim();
   const city = document.getElementById('pCity').value.trim();
   const stateVal = document.getElementById('pState').value.trim();
@@ -706,7 +727,7 @@ function renderAttendees(count){
   list.innerHTML = '';
   const step3ErrorEl = document.getElementById('step3Error');
   if(step3ErrorEl) step3ErrorEl.classList.remove('show');
-  const includeEmail = state.partnerType !== 'Distributor'; // Dealer / Authorised Retailer / Business Prospect capture email too
+  const includeEmail = state.partnerType !== 'Distributor'; // Dealer / Authorised Retailer / Business Associate capture email too
   for(let i=1;i<=count;i++){
     const block = document.createElement('div');
     block.className = 'attendee-block';
@@ -720,12 +741,7 @@ function renderAttendees(count){
           <div class="field-error att-mobile-error" data-idx="${i}">Enter a valid 10-digit mobile number</div>
         </div>
       </div>
-      ${includeEmail ? `<label>Email ID</label><input type="email" class="att-email" data-idx="${i}">` : ''}
-      <label>Dietary Preference <span class="hint">(for lunch headcount)</span></label>
-      <select class="att-diet" data-idx="${i}">
-        <option value="Veg">Vegetarian</option>
-        <option value="Non-Veg">Non-Vegetarian</option>
-      </select>`;
+      ${includeEmail ? `<label>Email ID</label><input type="email" class="att-email" data-idx="${i}">` : ''}`;
     list.appendChild(block);
   }
   list.querySelectorAll('.att-mobile').forEach(inp=>{
@@ -779,21 +795,18 @@ function tryGoStep4(){
 
 // ---- Step 4 ----
 function prepStep4(){
-  const isProspect = state.partnerType === 'Business Prospect';
+  const isProspect = state.partnerType === 'Business Associate';
   const company = isProspect ? document.getElementById('pCompany').value : document.getElementById('fCompany').value;
   const city = isProspect ? document.getElementById('pCity').value : document.getElementById('fCity').value;
   const stateVal = isProspect ? document.getElementById('pState').value : document.getElementById('fState').value;
   const code = isProspect ? '—' : document.getElementById('dealerCode').value.toUpperCase();
   const attendeeSummaries = Array.from(document.querySelectorAll('.attendee-block')).map(b=>{
-    const name = b.querySelector('.att-name').value.trim();
-    const dietSel = b.querySelector('.att-diet');
-    const dietLabel = dietSel.options[dietSel.selectedIndex].text;
-    return name ? (name + ' (' + dietLabel + ')') : '';
+    return b.querySelector('.att-name').value.trim();
   }).filter(Boolean);
 
   const rows = [
     ['Partner Type', state.partnerType],
-    ['Dealer Code', code],
+    ['Channel Partner Code', code],
     ['Firm Name', company || '—'],
     ['Location', (city||'—') + ', ' + (stateVal||'—')],
     ['Attendees', attendeeSummaries.length ? attendeeSummaries.join(', ') : '(names not entered)']
@@ -803,6 +816,7 @@ function prepStep4(){
     rows.push(['Email ID', document.getElementById('pEmail').value || '—']);
     rows.push(['Contact Number', document.getElementById('pPhone').value || '—']);
     rows.push(['PoC for application', document.getElementById('pocName').value || '—']);
+    rows.push(['PoC Email', document.getElementById('pocEmail').value || '—']);
     rows.push(['Already applied?', state.applied || '—']);
     if(state.applied === 'No'){
       rows.push(['Investment timeline', document.getElementById('investTimeline').value || '—']);
@@ -833,7 +847,7 @@ function checkSubmitEnabled(){
 // PASTE YOUR APPS SCRIPT WEB APP URL HERE (ends in /exec)
 // See the accompanying Apps_Script_Code.gs for the backend.
 // ============================================================
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyJBfn6KGIgkFaJPh48lpQNCl_0MzWXz8TRorSul6d_JU7JLwbaYlXOVBSLuIrSWz_Z/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyYU86paJjuihikgPPgKgskJlMFpPakQ0fLjP4WHXJoMtUVD8KUB77IxKqga4lePgxp/exec";
 
 // Flattens the nested payload into simple key:value pairs so each
 // value maps cleanly to one named column in the Sheet — no arrays,
@@ -847,7 +861,6 @@ function flattenPayload(payload){
         flat['attendee' + (i+1) + '_name']   = att.name   || '';
         flat['attendee' + (i+1) + '_mobile'] = att.mobile || '';
         flat['attendee' + (i+1) + '_email']  = att.email  || '';
-        flat['attendee' + (i+1) + '_diet']   = att.diet   || '';
       });
     } else if(k === 'businessProspect' && v){
       Object.keys(v).forEach(bk=>{
@@ -860,9 +873,29 @@ function flattenPayload(payload){
   return flat;
 }
 
+// Generates a reference ID like DS482913 (Distributor), DE118273 (Dealer),
+// AR205566 (Authorised Retailer), BA556021 (Business Associate). Not a
+// database-guaranteed unique key — just a friendly reference/check-in code
+// for a one-time event of this size, where a random-number collision is
+// astronomically unlikely.
+function generateRegistrationId(type){
+  const prefixes = {
+    "Distributor": "DS",
+    "Dealer": "DE",
+    "Authorised Retailer": "AR",
+    "Business Associate": "BA",
+    "Cash & Carry": "CC"
+  };
+  const prefix = prefixes[type] || "CP";
+  const randomPart = Math.floor(100000 + Math.random() * 900000); // 6 digits
+  return prefix + randomPart;
+}
+
 function submitForm(){
-  const isProspect = state.partnerType === 'Business Prospect';
+  const isProspect = state.partnerType === 'Business Associate';
+  const registrationId = generateRegistrationId(state.partnerType);
   const payload = {
+    registrationId: registrationId,
     partnerType: state.partnerType,
     dealerCode: isProspect ? null : document.getElementById('dealerCode').value.toUpperCase(),
     company: isProspect ? document.getElementById('pCompany').value : document.getElementById('fCompany').value,
@@ -874,12 +907,12 @@ function submitForm(){
     attendees: Array.from(document.querySelectorAll('.attendee-block')).map(b=>({
       name: b.querySelector('.att-name').value,
       mobile: b.querySelector('.att-mobile').value,
-      email: b.querySelector('.att-email') ? b.querySelector('.att-email').value : null,
-      diet: b.querySelector('.att-diet').value
+      email: b.querySelector('.att-email') ? b.querySelector('.att-email').value : null
     })),
     businessProspect: isProspect ? {
       alreadyApplied: state.applied || null,
       poc: document.getElementById('pocName').value,
+      pocEmail: document.getElementById('pocEmail').value,
       investmentTimeline: state.applied==='No' ? document.getElementById('investTimeline').value : null,
       investmentAmount: state.applied==='No' ? document.getElementById('investAmount').value : null
     } : null,
@@ -906,6 +939,7 @@ function submitForm(){
   document.getElementById('formBody').classList.add('hide');
   document.getElementById('successCard').classList.add('show');
   document.getElementById('cells').parentElement.style.display = 'none';
+  document.getElementById('regIdValue').innerText = registrationId;
 
   const finalRows = [
     ['Name(s)', payload.attendees.map(a=>a.name).filter(Boolean).join(', ') || '—'],
