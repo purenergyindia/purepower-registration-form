@@ -442,7 +442,7 @@
 
       <div id="attendeeList"></div>
 
-      <div class="field-error" id="step3Error">Please enter Attendee 1's name and a valid 10-digit mobile number.</div>
+      <div class="field-error" id="step3Error">Please enter Attendee 1's name, a valid 10-digit mobile number, and a valid email address.</div>
 
       <div class="btn-row">
         <button class="btn-ghost" onclick="goStep(2)">Back</button>
@@ -741,7 +741,7 @@ function renderAttendees(count){
           <div class="field-error att-mobile-error" data-idx="${i}">Enter a valid 10-digit mobile number</div>
         </div>
       </div>
-      ${includeEmail ? `<label>Email ID</label><input type="email" class="att-email" data-idx="${i}">` : ''}`;
+      ${includeEmail ? `<label>Email ID ${i===1?'<span class="req">*</span>':''}</label><input type="email" class="att-email" data-idx="${i}"><div class="field-error att-email-error" data-idx="${i}">Enter a valid email address</div>` : ''}`;
     list.appendChild(block);
   }
   list.querySelectorAll('.att-mobile').forEach(inp=>{
@@ -750,6 +750,14 @@ function renderAttendees(count){
       const err = list.querySelector('.att-mobile-error[data-idx="'+e.target.dataset.idx+'"]');
       const ok = /^[0-9]{10}$/.test(e.target.value);
       err.classList.toggle('show', e.target.value.length>0 && !ok);
+    });
+  });
+
+  list.querySelectorAll('.att-email').forEach(inp=>{
+    inp.addEventListener('input', function(e){
+      const err = list.querySelector('.att-email-error[data-idx="'+e.target.dataset.idx+'"]');
+      const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.target.value.trim());
+      if(err) err.classList.toggle('show', e.target.value.trim().length>0 && !ok);
     });
   });
 }
@@ -763,23 +771,31 @@ function validateStep3(){
     const nameInput = b.querySelector('.att-name');
     const mobileInput = b.querySelector('.att-mobile');
     const mobileErr = b.querySelector('.att-mobile-error');
+    const emailInput = b.querySelector('.att-email');
+    const emailErr = b.querySelector('.att-email-error');
     const name = nameInput.value.trim();
     const mobile = mobileInput.value.trim();
+    const email = emailInput ? emailInput.value.trim() : '';
     const mobileOk = /^[0-9]{10}$/.test(mobile);
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     const isFirst = idx === 0;
 
     nameInput.classList.remove('invalid');
     mobileInput.classList.remove('invalid');
     if(mobileErr) mobileErr.classList.remove('show');
+    if(emailInput) emailInput.classList.remove('invalid');
+    if(emailErr) emailErr.classList.remove('show');
 
     if(isFirst){
-      // Attendee 1 is mandatory: name + valid mobile required.
+      // Attendee 1 is mandatory: name + valid mobile + valid email required.
       if(!name){ nameInput.classList.add('invalid'); valid = false; }
       if(!mobileOk){ mobileInput.classList.add('invalid'); if(mobileErr) mobileErr.classList.add('show'); valid = false; }
-    } else if(name || mobile){
+      if(emailInput && !emailOk){ emailInput.classList.add('invalid'); if(emailErr) emailErr.classList.add('show'); valid = false; }
+    } else if(name || mobile || email){
       // Additional attendees are optional, but if someone starts filling
-      // one in, their mobile number still has to be a valid 10 digits.
+      // one in, their mobile number and email still have to be valid.
       if(!mobileOk){ mobileInput.classList.add('invalid'); if(mobileErr) mobileErr.classList.add('show'); valid = false; }
+      if(emailInput && !emailOk){ emailInput.classList.add('invalid'); if(emailErr) emailErr.classList.add('show'); valid = false; }
     }
   });
 
