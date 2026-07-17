@@ -480,8 +480,8 @@
     <div class="check">
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M4 12.5L9.5 18L20 6.5" stroke="#0F4A34" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </div>
-    <h2>Seat Confirmed</h2>
-    <p>Your registration for the PuREPower Channel Partner Workshop 2026 has been recorded. A confirmation will be sent to your official email shortly.</p>
+    <h2 id="successHeading">Seat Confirmed</h2>
+    <p id="successMessage">Your registration for the PuREPower Channel Partner Workshop 2026 has been recorded. A confirmation will be sent to your official email shortly.</p>
     <div class="reg-id-box">
       <span class="reg-id-label">Your Registration ID</span>
       <span class="reg-id-value" id="regIdValue"></span>
@@ -956,6 +956,11 @@ function submitForm(){
   document.getElementById('successCard').classList.add('show');
   document.getElementById('cells').parentElement.style.display = 'none';
   document.getElementById('regIdValue').innerText = registrationId;
+
+  const supportNote = 'If you haven\'t received any mail, please drop a mail to mis.systems@pureenergy.co.in.';
+  document.getElementById('successMessage').innerHTML = isProspect
+    ? 'Thank you for your interest. After internal approval from the company, you will receive a confirmation mail. ' + supportNote
+    : 'Your registration for the PuREPower Channel Partner Workshop 2026 has been recorded. A confirmation will be sent to your official email shortly. ' + supportNote;
 
   const finalRows = [
     ['Name(s)', payload.attendees.map(a=>a.name).filter(Boolean).join(', ') || '—'],
