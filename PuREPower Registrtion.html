@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PuREPower Channel Partner Workshop 2026 — Registration</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green-deep:#0F4A34;
+    --green-bright:#2FAE68;
+    --green-soft:#E7F5EC;
+    --orange:#F2801E;
+    --navy:#12181B;
+    --bg:#FAFAF7;
+    --ink:#161C19;
+    --ink-soft:#5C6864;
+    --line:#E4E7E2;
+    --white:#FFFFFF;
+    --danger:#C6402C;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(circle at 8% 12%, rgba(47,174,104,0.07), transparent 42%),
+      radial-gradient(circle at 94% 6%, rgba(15,74,52,0.06), transparent 40%),
+      radial-gradient(circle at 90% 92%, rgba(242,128,30,0.05), transparent 38%),
+      var(--bg);
+    background-attachment:fixed;
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+  .wrap{flex:1 0 auto;}
+  footer{flex:none;}
+  /* faint battery-cell grid texture, purely decorative, fills empty desktop space */
+  body::before{
+    content:"";
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(15,74,52,0.035) 0 1px, transparent 1px 64px),
+      repeating-linear-gradient(90deg, rgba(15,74,52,0.035) 0 1px, transparent 1px 64px);
+    mask-image:radial-gradient(ellipse 70% 60% at 50% 0%, black 0%, transparent 75%);
+    -webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 0%, black 0%, transparent 75%);
+  }
+  .hero, .charge-track, .wrap, footer{position:relative;z-index:1;}
+  h1,h2,h3,.display{font-family:'Space Grotesk',sans-serif;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+
+  /* ---------- Header ---------- */
+  .hero{
+    background:linear-gradient(120deg,var(--green-deep) 0%, var(--green-bright) 100%);
+    color:var(--white);
+    padding:36px 24px 44px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::after{
+    content:"";
+    position:absolute; right:-60px; top:-60px;
+    width:260px;height:260px;border-radius:50%;
+    background:radial-gradient(circle, rgba(255,255,255,0.10), transparent 70%);
+  }
+  .hero-inner{max-width:720px;margin:0 auto;position:relative;z-index:1;display:flex;align-items:center;gap:36px;}
+  .hero-text{flex:1;min-width:0;}
+  .hero-visual{flex:none;display:none;}
+  .battery-badge{
+    width:132px;height:132px;border-radius:50%;
+    background:rgba(255,255,255,0.10);
+    border:1px solid rgba(255,255,255,0.22);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .brand{font-size:22px;font-weight:700;letter-spacing:-0.02em;}
+  .brand span{color:#BFF2D6;}
+  .eyebrow{
+    font-size:11px;letter-spacing:0.14em;text-transform:uppercase;
+    opacity:0.85;margin-top:14px;font-weight:600;
+  }
+  .hero h1{font-size:26px;line-height:1.25;margin:8px 0 6px;font-weight:700;}
+  .hero .sub{font-size:14px;opacity:0.92;line-height:1.5;max-width:520px;}
+  .meta-row{
+    display:flex;gap:18px;flex-wrap:wrap;margin-top:18px;font-size:12.5px;
+  }
+  .meta-row div{background:rgba(0,0,0,0.16);padding:7px 11px;border-radius:7px;}
+  .meta-row b{display:block;font-size:13px;font-weight:600;}
+
+  /* ---------- Battery progress ---------- */
+  .charge-track{
+    max-width:720px;margin:-22px auto 0;padding:0 24px;position:relative;z-index:2;
+  }
+  .charge-shell{
+    background:var(--white);border:1px solid var(--line);
+    border-radius:14px;padding:14px 18px;
+    box-shadow:0 6px 20px rgba(15,74,52,0.08);
+    display:flex;align-items:center;gap:14px;
+  }
+  .cells{display:flex;gap:5px;flex:1;}
+  .cell{
+    height:20px;flex:1;border-radius:4px;background:var(--line);
+    position:relative;overflow:hidden;transition:background 0.4s ease;
+  }
+  .cell.on{background:var(--green-bright);}
+  .cell-terminal{width:5px;height:11px;background:var(--line);border-radius:0 3px 3px 0;}
+  .charge-label{font-size:11.5px;color:var(--ink-soft);white-space:nowrap;font-weight:600;}
+
+  /* ---------- Form shell ---------- */
+  .wrap{max-width:720px;margin:0 auto;padding:28px 24px 80px;}
+  .card{
+    background:var(--white);border:1px solid var(--line);border-radius:16px;
+    padding:26px 22px;margin-bottom:18px;
+    box-shadow:0 10px 30px rgba(15,74,52,0.06);
+  }
+  .step-tag{
+    display:inline-flex;align-items:center;gap:6px;
+    font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;
+    color:var(--green-deep);background:var(--green-soft);
+    padding:4px 10px;border-radius:20px;margin-bottom:10px;
+  }
+  .card h2{font-size:17px;margin:0 0 4px;font-weight:600;}
+  .card .desc{font-size:13px;color:var(--ink-soft);margin:0 0 18px;line-height:1.5;}
+
+  /* partner type tiles */
+  .tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .tile{
+    border:1.5px solid var(--line);border-radius:12px;padding:14px 14px;
+    cursor:pointer;transition:all 0.15s ease;background:var(--white);
+    position:relative;
+  }
+  .tile:hover{border-color:var(--green-bright);}
+  .tile.sel{border-color:var(--green-deep);background:var(--green-soft);}
+  .tile .name{font-weight:600;font-size:14.5px;}
+  .tile .seats{font-size:11.5px;color:var(--ink-soft);margin-top:3px;}
+  .tile .dot{
+    position:absolute;top:12px;right:12px;width:16px;height:16px;border-radius:50%;
+    border:1.5px solid var(--line);background:var(--white);
+  }
+  .tile.sel .dot{border-color:var(--green-deep);background:var(--green-deep);
+    box-shadow:inset 0 0 0 3px var(--white);}
+
+  /* fields */
+  label{display:block;font-size:12.5px;font-weight:600;color:var(--ink);margin:14px 0 6px;}
+  label .req{color:var(--danger);}
+  label .hint{font-weight:400;color:var(--ink-soft);text-transform:none;letter-spacing:0;}
+  .section-divider{border-top:1px solid var(--line);margin:22px 0 16px;}
+  .mini-heading{
+    font-size:13.5px;font-weight:700;color:var(--ink);margin:0 0 4px;
+    font-family:'Inter',sans-serif;
+  }
+  input[type=text],input[type=email],input[type=tel],select,textarea{
+    width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:9px;
+    font-size:14px;font-family:'Inter',sans-serif;color:var(--ink);background:var(--white);
+    transition:border-color .15s ease;
+  }
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--green-bright);}
+  input.readonly-field{background:#F3F6F4;color:var(--ink-soft);}
+  .field-error{font-size:11.5px;color:var(--danger);margin-top:5px;display:none;}
+  .field-error.show{display:block;}
+  input.invalid{border-color:var(--danger);}
+
+  /* dealer code + verify */
+  .code-row{display:flex;gap:8px;}
+  .code-row input{text-transform:uppercase;}
+  .verify-status{
+    margin-top:10px;font-size:12.5px;display:flex;align-items:center;gap:7px;
+    padding:9px 11px;border-radius:8px;font-weight:500;
+  }
+  .verify-status.idle{color:var(--ink-soft);}
+  .verify-status.ok{background:var(--green-soft);color:var(--green-deep);}
+  .verify-status.bad{background:#FBEAE7;color:var(--danger);}
+  .dot-pulse{width:8px;height:8px;border-radius:50%;flex:none;}
+  .dot-pulse.ok{background:var(--green-bright);}
+  .dot-pulse.bad{background:var(--danger);}
+
+  .partner-panel{
+    margin-top:14px;border:1.5px dashed var(--line);border-radius:12px;
+    padding:14px;display:none;
+  }
+  .partner-panel.show{display:block;animation:fadeIn .3s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+  .panel-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .panel-grid .full{grid-column:1/-1;}
+
+  /* attendees */
+  .attendee-block{
+    border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:12px;
+    position:relative;
+  }
+  .attendee-block .idx{
+    position:absolute;top:-10px;left:14px;background:var(--green-deep);color:#fff;
+    font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;
+  }
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px;}
+
+  /* declaration */
+  .decl{
+    display:flex;gap:10px;align-items:flex-start;background:var(--green-soft);
+    border-radius:10px;padding:13px;font-size:12.5px;line-height:1.55;color:var(--ink);
+  }
+  .decl input{width:auto;margin-top:2px;}
+
+  /* buttons */
+  .btn-row{display:flex;gap:10px;margin-top:22px;}
+  button{
+    font-family:'Inter',sans-serif;font-weight:600;font-size:14px;
+    border-radius:10px;padding:13px 18px;cursor:pointer;border:none;
+    transition:transform .1s ease, box-shadow .15s ease;
+  }
+  button:active{transform:scale(0.98);}
+  .btn-primary{background:var(--navy);color:#fff;flex:1;}
+  .btn-primary:hover{background:#000;}
+  .btn-primary.orange{background:var(--orange);}
+  .btn-primary.orange:hover{background:#D66C0F;}
+  .btn-ghost{background:transparent;color:var(--ink-soft);border:1.5px solid var(--line);}
+  .btn-ghost:hover{border-color:var(--ink-soft);}
+  button:disabled{opacity:0.45;cursor:not-allowed;}
+
+  .add-remove{display:flex;gap:8px;margin-top:12px;}
+  .add-remove button{padding:8px 14px;font-size:12.5px;}
+
+  /* success screen */
+  .success{display:none;text-align:center;padding:40px 20px;}
+  .success.show{display:block;}
+  .success .check{
+    width:60px;height:60px;border-radius:50%;background:var(--green-soft);
+    display:flex;align-items:center;justify-content:center;margin:0 auto 16px;
+  }
+  .success h2{font-size:20px;margin-bottom:6px;}
+  .success p{color:var(--ink-soft);font-size:14px;line-height:1.6;max-width:420px;margin:0 auto;}
+  .receipt{
+    text-align:left;background:var(--bg);border:1px solid var(--line);border-radius:12px;
+    padding:16px;margin-top:20px;font-size:12.5px;
+  }
+  .receipt div{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed var(--line);}
+  .receipt div:last-child{border-bottom:none;}
+  .receipt b{font-weight:600;}
+
+  .form-body{display:block;}
+  .form-body.hide{display:none;}
+
+  footer{
+    background:var(--navy);color:rgba(255,255,255,0.75);
+    padding:18px 24px;text-align:center;font-size:11.5px;
+  }
+  footer b{color:#fff;}
+
+  @media(max-width:420px){
+    .tiles{grid-template-columns:1fr;}
+    .panel-grid{grid-template-columns:1fr;}
+    .grid2{grid-template-columns:1fr;}
+  }
+
+  /* ---------- Desktop refinements ---------- */
+  @media(min-width:860px){
+    .hero{padding:52px 24px 60px;}
+    .hero-visual{display:flex;}
+    .hero h1{font-size:30px;}
+    .wrap{padding-top:36px;}
+    .card{padding:32px 36px;}
+    .tiles{gap:12px;}
+    .tile{padding:18px 18px;}
+  }
+
+
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="brand">PuRE<span>Power</span></div>
+      <div class="eyebrow">Channel Partner Workshop 2026 · Strictly by invitation</div>
+      <h1>Registration — Workshop on Battery Energy Storage Systems (BESS)</h1>
+      <div class="sub">Saturday, 22 August 2026 · 10:00 AM – 5:00 PM · Auditorium 1, Convention Centre, IIT Hyderabad</div>
+    </div>
+    <div class="hero-visual">
+      <div class="battery-badge">
+        <svg width="56" height="56" viewBox="0 0 24 24" fill="none">
+          <rect x="2" y="7" width="17" height="10" rx="2.2" stroke="#fff" stroke-width="1.6"/>
+          <rect x="20" y="10" width="2.4" height="4" rx="1" fill="#fff"/>
+          <rect x="4.5" y="9.3" width="4.5" height="5.4" rx="0.8" fill="#BFF2D6"/>
+          <rect x="9.6" y="9.3" width="4.5" height="5.4" rx="0.8" fill="#BFF2D6" opacity="0.55"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="charge-track">
+  <div class="charge-shell">
+    <div class="cells" id="cells">
+      <div class="cell" data-c="1"></div>
+      <div class="cell" data-c="2"></div>
+      <div class="cell" data-c="3"></div>
+      <div class="cell" data-c="4"></div>
+    </div>
+    <div class="cell-terminal"></div>
+    <div class="charge-label" id="chargeLabel">Step 1 of 4</div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="form-body" id="formBody">
+
+    <!-- STEP 1 -->
+    <div class="card" id="step1">
+      <div class="step-tag">Step 1</div>
+      <h2>Who's registering?</h2>
+      <p class="desc">Select your partner category. This is strictly for Authorized Channel Partners of PuREPower.</p>
+      <div class="tiles" id="partnerTiles">
+        <div class="tile" data-type="Distributor"><div class="dot"></div><div class="name">Distributor</div></div>
+        <div class="tile" data-type="Dealer"><div class="dot"></div><div class="name">Dealer</div></div>
+        <div class="tile" data-type="Authorised Retailer"><div class="dot"></div><div class="name">Authorised Retailer</div></div>
+        <div class="tile" data-type="Business Prospect"><div class="dot"></div><div class="name">Business Prospect</div></div>
+      </div>
+    </div>
+
+    <!-- STEP 2: Dealer code / details -->
+    <div class="card" id="step2" style="display:none;">
+      <div class="step-tag">Step 2</div>
+      <h2 id="step2Title">Confirm your partner details</h2>
+      <p class="desc" id="step2Desc">Enter your Dealer Code — your firm's details will be pulled up automatically.</p>
+
+      <div id="codeSection">
+        <label>Dealer Code <span class="req">*</span></label>
+        <div class="code-row">
+          <input type="text" id="dealerCode" placeholder="" maxlength="14">
+        </div>
+        <div class="verify-status idle" id="verifyStatus">
+          <span class="dot-pulse" style="background:var(--ink-soft);"></span>
+          <span>Enter your Dealer Code to auto-fill your firm's details</span>
+        </div>
+      </div>
+
+      <div class="partner-panel" id="partnerPanel">
+        <div class="panel-grid">
+          <div class="full">
+            <label>Firm / Company Name</label>
+            <input type="text" id="fCompany">
+          </div>
+          <div>
+            <label>City</label>
+            <input type="text" id="fCity">
+          </div>
+          <div>
+            <label>State</label>
+            <input type="text" id="fState">
+          </div>
+          <div>
+            <label>Official Email</label>
+            <input type="email" id="fEmail">
+          </div>
+          <div>
+            <label>Official Contact Number</label>
+            <input type="tel" id="fPhone">
+          </div>
+        </div>
+      </div>
+
+      <!-- Business Prospect-only manual fields -->
+      <div id="prospectSection" style="display:none;">
+        <label>Firm / Company Name <span class="req">*</span></label>
+        <input type="text" id="pCompany">
+        <div class="grid2">
+          <div><label>City <span class="req">*</span></label><input type="text" id="pCity"></div>
+          <div><label>State <span class="req">*</span></label><input type="text" id="pState"></div>
+        </div>
+        <div class="grid2">
+          <div>
+            <label>Email ID <span class="req">*</span></label>
+            <input type="email" id="pEmail" placeholder="you@company.com">
+            <div class="field-error" id="pEmailError">Enter a valid email address</div>
+          </div>
+          <div>
+            <label>Contact Number <span class="req">*</span></label>
+            <input type="tel" id="pPhone" placeholder="10-digit mobile number" maxlength="10">
+            <div class="field-error" id="pPhoneError">Enter a valid 10-digit mobile number</div>
+          </div>
+        </div>
+
+        <label>Who was your point of contact (PoC) for the Channel Partner registration?</label>
+        <input type="text" id="pocName" placeholder="Name of the PURE Energy contact">
+
+        <label>Have you already applied for Channel Partner registration? <span class="req">*</span></label>
+        <div class="tiles" style="grid-template-columns:1fr 1fr;">
+          <div class="tile choice-tile" data-applied="Yes"><div class="dot"></div><div class="name">Yes</div></div>
+          <div class="tile choice-tile" data-applied="No"><div class="dot"></div><div class="name">No</div></div>
+        </div>
+
+        <div id="appliedNoBlock" style="display:none;">
+          <label>By when are you planning for investment? <span class="req">*</span></label>
+          <select id="investTimeline">
+            <option value="">Select timeline</option>
+            <option value="Within 1 month">Within 1 month</option>
+            <option value="1–3 months">1–3 months</option>
+            <option value="3–6 months">3–6 months</option>
+            <option value="6+ months">6+ months</option>
+          </select>
+          <label>How much is the investment amount (₹)? <span class="req">*</span></label>
+          <input type="text" id="investAmount" placeholder="e.g. 10,00,000">
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-ghost" onclick="goStep(1)">Back</button>
+        <button class="btn-primary" id="step2Next" onclick="goStep(3)" disabled>Continue</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: attendees -->
+    <div class="card" id="step3" style="display:none;">
+      <div class="step-tag">Step 3</div>
+      <h2>Who's attending?</h2>
+      <p class="desc">Add attendee details. Seats are capped per your partner type.</p>
+
+      <label>Number of attendees <span class="req">*</span></label>
+      <select id="attendeeCount"></select>
+
+      <div id="attendeeList"></div>
+
+      <label style="margin-top:20px;">Dietary preference <span class="hint">(for lunch headcount)</span></label>
+      <select id="diet">
+        <option value="Veg">Vegetarian</option>
+        <option value="Non-Veg">Non-Vegetarian</option>
+        <option value="Jain">Jain</option>
+      </select>
+
+      <div class="btn-row">
+        <button class="btn-ghost" onclick="goStep(2)">Back</button>
+        <button class="btn-primary" onclick="goStep(4)">Continue</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: declaration -->
+    <div class="card" id="step4" style="display:none;">
+      <div class="step-tag">Step 4</div>
+      <h2>Confirm & submit</h2>
+      <p class="desc">Review looks good? Confirm below to lock your seats.</p>
+
+      <div class="receipt" id="reviewBox"></div>
+
+      <label style="margin-top:18px;">Your mobile number <span class="req">*</span> <span class="hint">(primary attendee, for event updates)</span></label>
+      <input type="tel" id="primaryMobile" placeholder="10-digit mobile number" maxlength="10">
+      <div class="field-error" id="mobileError">Enter a valid 10-digit mobile number</div>
+
+      <div class="decl" style="margin-top:16px;">
+        <input type="checkbox" id="declCheck">
+        <span>I confirm I am an Authorized Channel Partner of PuREPower (or a business prospect invited by PURE Energy) and will attend the full-day workshop on Saturday, 22 August 2026.</span>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-ghost" onclick="goStep(3)">Back</button>
+        <button class="btn-primary orange" id="submitBtn" onclick="submitForm()" disabled>Confirm seat</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="card success" id="successCard">
+    <div class="check">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M4 12.5L9.5 18L20 6.5" stroke="#0F4A34" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <h2>Seat confirmed</h2>
+    <p>Your registration for the PuREPower Channel Partner Workshop 2026 has been recorded. A confirmation will be sent to your official email shortly.</p>
+    <div class="receipt" id="finalReceipt"></div>
+  </div>
+
+</div>
+
+<footer>
+  <b>PURE Energy</b> · pureenergy.co.in · Partner support: 92400 45993<br>
+  Auditorium 1, Convention Centre, IIT Hyderabad · Saturday, 22 August 2026
+</footer>
+
+<script>
+// NOTE: the dealer master list used to live here as an embedded array.
+// It's now looked up server-side via APPS_SCRIPT_URL (see doGet in
+// Apps_Script_Code.gs), so no dealer data ships to the browser anymore.
+
+const SEAT_LIMIT = {
+  "Distributor": 4,
+  "Dealer": 2,
+  "Authorised Retailer": 1,
+  "Business Prospect": 1,
+  "Cash & Carry": 1
+};
+
+let state = {
+  partnerType: null,
+  dealerCode: null,
+  matchedRecord: null,
+  attendees: [],
+  applied: null,
+};
+
+// ---- Step 1: tile selection ----
+document.querySelectorAll('#partnerTiles .tile').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.tile').forEach(x=>x.classList.remove('sel'));
+    t.classList.add('sel');
+    state.partnerType = t.dataset.type;
+    setTimeout(()=>goStep(2), 180);
+  });
+});
+
+function updateCharge(step){
+  document.querySelectorAll('.cell').forEach(c=>{
+    c.classList.toggle('on', parseInt(c.dataset.c) <= step);
+  });
+  document.getElementById('chargeLabel').innerText = 'Step ' + step + ' of 4';
+}
+
+function goStep(n){
+  ['step1','step2','step3','step4'].forEach((id,i)=>{
+    document.getElementById(id).style.display = (i === n-1) ? 'block' : 'none';
+  });
+  updateCharge(n);
+
+  if(n===2){ prepStep2(); }
+  if(n===3){ prepStep3(); }
+  if(n===4){ prepStep4(); }
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ---- Step 2 ----
+function prepStep2(){
+  const isProspect = state.partnerType === 'Business Prospect';
+  document.getElementById('codeSection').style.display = isProspect ? 'none' : 'block';
+  document.getElementById('prospectSection').style.display = isProspect ? 'block' : 'none';
+  document.getElementById('partnerPanel').classList.remove('show');
+  document.getElementById('step2Title').innerText = isProspect
+    ? 'Tell us about your business'
+    : 'Confirm your partner details';
+  document.getElementById('step2Desc').innerText = isProspect
+    ? 'Since you are not yet an authorized partner, enter your business details manually.'
+    : 'Enter your Dealer Code — your firm details will be pulled up automatically.';
+  document.getElementById('step2Next').disabled = true;
+
+  if(isProspect){
+    validateProspect();
+  }
+}
+
+// Yes/No "already applied" tiles
+document.querySelectorAll('.choice-tile').forEach(t=>{
+  t.addEventListener('click', ()=>{
+    document.querySelectorAll('.choice-tile').forEach(x=>x.classList.remove('sel'));
+    t.classList.add('sel');
+    state.applied = t.dataset.applied;
+    document.getElementById('appliedNoBlock').style.display = (state.applied==='No') ? 'block' : 'none';
+    validateProspect();
+  });
+});
+
+['pCompany','pCity','pState','pEmail','pPhone','pocName','investTimeline','investAmount'].forEach(id=>{
+  const el = document.getElementById(id);
+  if(el) el.addEventListener('input', validateProspect);
+});
+
+document.getElementById('pPhone').addEventListener('input', function(e){
+  e.target.value = e.target.value.replace(/[^0-9]/g,'').slice(0,10);
+});
+
+function validateProspect(){
+  if(state.partnerType !== 'Business Prospect') return;
+  const company = document.getElementById('pCompany').value.trim();
+  const city = document.getElementById('pCity').value.trim();
+  const stateVal = document.getElementById('pState').value.trim();
+  const email = document.getElementById('pEmail').value.trim();
+  const phone = document.getElementById('pPhone').value.trim();
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const phoneOk = /^[0-9]{10}$/.test(phone);
+
+  document.getElementById('pEmailError').classList.toggle('show', email.length>0 && !emailOk);
+  document.getElementById('pPhoneError').classList.toggle('show', phone.length>0 && !phoneOk);
+
+  let ok = !!(company && city && stateVal && emailOk && phoneOk && state.applied);
+  if(state.applied === 'No'){
+    ok = ok && !!document.getElementById('investTimeline').value && !!document.getElementById('investAmount').value.trim();
+  }
+  document.getElementById('step2Next').disabled = !ok;
+}
+
+let dealerLookupTimer = null;
+let dealerLookupSeq = 0; // guards against a slow older request overwriting a newer result
+
+document.getElementById('dealerCode').addEventListener('input', function(e){
+  const val = e.target.value.trim().toUpperCase();
+  const status = document.getElementById('verifyStatus');
+  const panel = document.getElementById('partnerPanel');
+  const nextBtn = document.getElementById('step2Next');
+
+  clearTimeout(dealerLookupTimer);
+  nextBtn.disabled = true;
+
+  if(val.length < 5){
+    status.className = 'verify-status idle';
+    status.innerHTML = '<span class="dot-pulse" style="background:var(--ink-soft);"></span><span>Enter your Dealer Code to auto-fill your firm details</span>';
+    panel.classList.remove('show');
+    return;
+  }
+
+  status.className = 'verify-status idle';
+  status.innerHTML = '<span class="dot-pulse" style="background:var(--ink-soft);"></span><span>Checking…</span>';
+
+  const thisSeq = ++dealerLookupSeq;
+  dealerLookupTimer = setTimeout(()=>{ lookupDealerCode(val, thisSeq); }, 350); // debounce while typing
+});
+
+function lookupDealerCode(val, seq){
+  const status = document.getElementById('verifyStatus');
+  const panel = document.getElementById('partnerPanel');
+  const nextBtn = document.getElementById('step2Next');
+
+  if(!APPS_SCRIPT_URL || APPS_SCRIPT_URL.indexOf('PASTE_YOUR') !== -1){
+    status.className = 'verify-status bad';
+    status.innerHTML = '<span class="dot-pulse bad"></span><span>Dealer lookup isn\'t connected yet — contact PURE Energy support.</span>';
+    return;
+  }
+
+  fetch(APPS_SCRIPT_URL + '?code=' + encodeURIComponent(val))
+    .then(res => res.json())
+    .then(data => {
+      if(seq !== dealerLookupSeq) return; // a newer keystroke already superseded this request
+
+      if(data.found && data.record){
+        const match = data.record;
+        status.className = 'verify-status ok';
+        status.innerHTML = '<span class="dot-pulse ok"></span><span>Verified — ' + match.company + ' (' + match.type + ')</span>';
+        document.getElementById('fCompany').value = match.company;
+        document.getElementById('fCity').value = match.city;
+        document.getElementById('fState').value = match.state;
+        document.getElementById('fEmail').value = match.email;
+        document.getElementById('fPhone').value = match.phone;
+        panel.classList.add('show');
+        nextBtn.disabled = false;
+        state.matchedRecord = match;
+        state.partnerType = match.type;
+      } else {
+        status.className = 'verify-status bad';
+        status.innerHTML = '<span class="dot-pulse bad"></span><span>No partner found with this code — check spelling or contact 92400 45993</span>';
+        panel.classList.remove('show');
+        nextBtn.disabled = true;
+        state.matchedRecord = null;
+      }
+    })
+    .catch(err => {
+      if(seq !== dealerLookupSeq) return;
+      console.error('Dealer lookup network error:', err);
+      status.className = 'verify-status bad';
+      status.innerHTML = '<span class="dot-pulse bad"></span><span>Couldn\'t reach the lookup service — check your connection and try again.</span>';
+      panel.classList.remove('show');
+      nextBtn.disabled = true;
+    });
+}
+
+// ---- Step 3: attendees ----
+function prepStep3(){
+  const limit = SEAT_LIMIT[state.partnerType] || 1;
+  const sel = document.getElementById('attendeeCount');
+  sel.innerHTML = '';
+  for(let i=1;i<=limit;i++){
+    const opt = document.createElement('option');
+    opt.value = i; opt.innerText = i + (i===1?' attendee':' attendees');
+    sel.appendChild(opt);
+  }
+  renderAttendees(parseInt(sel.value));
+  sel.onchange = ()=> renderAttendees(parseInt(sel.value));
+}
+
+function renderAttendees(count){
+  const list = document.getElementById('attendeeList');
+  list.innerHTML = '';
+  const includeEmail = state.partnerType !== 'Distributor'; // Dealer / Authorised Retailer / Business Prospect capture email too
+  for(let i=1;i<=count;i++){
+    const block = document.createElement('div');
+    block.className = 'attendee-block';
+    block.innerHTML = `
+      <div class="idx">Attendee ${i}</div>
+      <div class="grid2">
+        <div><label>Guest Name ${i===1?'<span class="req">*</span>':''}</label><input type="text" class="att-name" data-idx="${i}"></div>
+        <div><label>Mobile Number ${i===1?'<span class="req">*</span>':''}</label><input type="tel" class="att-mobile" data-idx="${i}" maxlength="10"></div>
+      </div>
+      ${includeEmail ? `<label>Email ID</label><input type="email" class="att-email" data-idx="${i}">` : ''}
+      <div class="field-error att-mobile-error" data-idx="${i}">Enter a valid 10-digit mobile number</div>`;
+    list.appendChild(block);
+  }
+  list.querySelectorAll('.att-mobile').forEach(inp=>{
+    inp.addEventListener('input', function(e){
+      e.target.value = e.target.value.replace(/[^0-9]/g,'').slice(0,10);
+      const err = list.querySelector('.att-mobile-error[data-idx="'+e.target.dataset.idx+'"]');
+      const ok = /^[0-9]{10}$/.test(e.target.value);
+      err.classList.toggle('show', e.target.value.length>0 && !ok);
+    });
+  });
+}
+
+// ---- Step 4 ----
+function prepStep4(){
+  const isProspect = state.partnerType === 'Business Prospect';
+  const company = isProspect ? document.getElementById('pCompany').value : document.getElementById('fCompany').value;
+  const city = isProspect ? document.getElementById('pCity').value : document.getElementById('fCity').value;
+  const stateVal = isProspect ? document.getElementById('pState').value : document.getElementById('fState').value;
+  const code = isProspect ? '—' : document.getElementById('dealerCode').value.toUpperCase();
+  const names = Array.from(document.querySelectorAll('.att-name')).map(i=>i.value).filter(Boolean);
+  const diet = document.getElementById('diet').value;
+
+  const rows = [
+    ['Partner Type', state.partnerType],
+    ['Dealer Code', code],
+    ['Firm Name', company || '—'],
+    ['Location', (city||'—') + ', ' + (stateVal||'—')],
+    ['Attendees', names.length ? names.join(', ') : '(names not entered)'],
+    ['Dietary preference', diet]
+  ];
+
+  if(isProspect){
+    rows.push(['Email ID', document.getElementById('pEmail').value || '—']);
+    rows.push(['Contact Number', document.getElementById('pPhone').value || '—']);
+    rows.push(['PoC for application', document.getElementById('pocName').value || '—']);
+    rows.push(['Already applied?', state.applied || '—']);
+    if(state.applied === 'No'){
+      rows.push(['Investment timeline', document.getElementById('investTimeline').value || '—']);
+      rows.push(['Investment amount', document.getElementById('investAmount').value ? '₹' + document.getElementById('investAmount').value : '—']);
+    }
+  }
+
+  document.getElementById('reviewBox').innerHTML = rows.map(r=>
+    `<div><span>${r[0]}</span><b>${r[1]}</b></div>`
+  ).join('');
+}
+
+document.getElementById('declCheck').addEventListener('change', checkSubmitEnabled);
+document.getElementById('primaryMobile').addEventListener('input', function(e){
+  e.target.value = e.target.value.replace(/[^0-9]/g,'').slice(0,10);
+  checkSubmitEnabled();
+});
+
+function checkSubmitEnabled(){
+  const mobile = document.getElementById('primaryMobile').value;
+  const decl = document.getElementById('declCheck').checked;
+  const mobileOk = /^[0-9]{10}$/.test(mobile);
+  document.getElementById('mobileError').classList.toggle('show', mobile.length>0 && !mobileOk);
+  document.getElementById('submitBtn').disabled = !(mobileOk && decl);
+}
+
+// ============================================================
+// PASTE YOUR APPS SCRIPT WEB APP URL HERE (ends in /exec)
+// See the accompanying Apps_Script_Code.gs for the backend.
+// ============================================================
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw40k-Cc6fTNwH7aGQjrN-SNA59BoSBI2nUOwkhanzPfKo9KVh5lp8W8-u8fyOUma-9UQ/exec";
+
+// Flattens the nested payload into simple key:value pairs so each
+// value maps cleanly to one named column in the Sheet — no arrays,
+// no nested objects. New keys just become new columns automatically.
+function flattenPayload(payload){
+  const flat = {};
+  Object.keys(payload).forEach(k=>{
+    const v = payload[k];
+    if(k === 'attendees' && Array.isArray(v)){
+      v.forEach((att,i)=>{
+        flat['attendee' + (i+1) + '_name']   = att.name   || '';
+        flat['attendee' + (i+1) + '_mobile'] = att.mobile || '';
+        flat['attendee' + (i+1) + '_email']  = att.email  || '';
+      });
+    } else if(k === 'businessProspect' && v){
+      Object.keys(v).forEach(bk=>{
+        flat['prospect_' + bk] = (v[bk] === null || v[bk] === undefined) ? '' : v[bk];
+      });
+    } else {
+      flat[k] = (v === null || v === undefined) ? '' : v;
+    }
+  });
+  return flat;
+}
+
+function submitForm(){
+  const isProspect = state.partnerType === 'Business Prospect';
+  const payload = {
+    partnerType: state.partnerType,
+    dealerCode: isProspect ? null : document.getElementById('dealerCode').value.toUpperCase(),
+    company: isProspect ? document.getElementById('pCompany').value : document.getElementById('fCompany').value,
+    city: isProspect ? document.getElementById('pCity').value : document.getElementById('fCity').value,
+    state: isProspect ? document.getElementById('pState').value : document.getElementById('fState').value,
+    email: isProspect ? document.getElementById('pEmail').value : document.getElementById('fEmail').value,
+    officialPhone: isProspect ? document.getElementById('pPhone').value : document.getElementById('fPhone').value,
+    primaryMobile: document.getElementById('primaryMobile').value,
+    attendees: Array.from(document.querySelectorAll('.attendee-block')).map(b=>({
+      name: b.querySelector('.att-name').value,
+      mobile: b.querySelector('.att-mobile').value,
+      email: b.querySelector('.att-email') ? b.querySelector('.att-email').value : null
+    })),
+    diet: document.getElementById('diet').value,
+    businessProspect: isProspect ? {
+      alreadyApplied: state.applied || null,
+      poc: document.getElementById('pocName').value,
+      investmentTimeline: state.applied==='No' ? document.getElementById('investTimeline').value : null,
+      investmentAmount: state.applied==='No' ? document.getElementById('investAmount').value : null
+    } : null,
+    submittedAt: new Date().toISOString()
+  };
+
+  const flatPayload = flattenPayload(payload);
+  console.log('PuREPower registration payload (flattened for Sheet):', flatPayload);
+
+  if(APPS_SCRIPT_URL && APPS_SCRIPT_URL.indexOf('PASTE_YOUR') === -1){
+    // no-cors + text/plain avoids a CORS preflight that Apps Script Web Apps
+    // can't answer; response is opaque, so we can't read success/failure back,
+    // but the write itself still goes through.
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify(flatPayload)
+    }).catch(err => console.error('Submission network error:', err));
+  } else {
+    console.warn('APPS_SCRIPT_URL not set yet — response was only logged locally, not saved to a Sheet.');
+  }
+
+  document.getElementById('formBody').classList.add('hide');
+  document.getElementById('successCard').classList.add('show');
+  document.getElementById('cells').parentElement.style.display = 'none';
+
+  const finalRows = [
+    ['Name(s)', payload.attendees.map(a=>a.name).filter(Boolean).join(', ') || '—'],
+    ['Firm', payload.company || '—'],
+    ['Partner type', payload.partnerType],
+    ['Mobile', payload.primaryMobile]
+  ];
+  document.getElementById('finalReceipt').innerHTML = finalRows.map(r=>
+    `<div><span>${r[0]}</span><b>${r[1]}</b></div>`
+  ).join('');
+}
+
+updateCharge(1);
+</script>
+</body>
+</html>
