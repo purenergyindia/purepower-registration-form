@@ -354,6 +354,10 @@
             <label>Firm / Company Name</label>
             <input type="text" id="fCompany">
           </div>
+          <div class="full">
+            <label>Dealer Name</label>
+            <input type="text" id="fName">
+          </div>
           <div>
             <label>City</label>
             <input type="text" id="fCity">
@@ -682,6 +686,7 @@ function lookupDealerCode(val, seq){
         status.className = 'verify-status ok';
         status.innerHTML = '<span class="dot-pulse ok"></span><span>Verified — ' + match.company + '</span>';
         document.getElementById('fCompany').value = match.company;
+        document.getElementById('fName').value = match.name;
         document.getElementById('fCity').value = match.city;
         document.getElementById('fState').value = match.state;
         document.getElementById('fEmail').value = match.email;
@@ -825,6 +830,7 @@ function prepStep4(){
     ['Partner Type', state.partnerType],
     ['Channel Partner Code', code],
     ['Firm Name', company || '—'],
+    ['Dealer Name', isProspect ? '—' : (document.getElementById('fName').value || '—')],
     ['Location', (city||'—') + ', ' + (stateVal||'—')],
     ['Attendees', attendeeSummaries.length ? attendeeSummaries.join(', ') : '(names not entered)']
   ];
@@ -917,6 +923,7 @@ function submitForm(){
     partnerType: state.partnerType,
     dealerCode: isProspect ? null : document.getElementById('dealerCode').value.toUpperCase(),
     company: isProspect ? document.getElementById('pCompany').value : document.getElementById('fCompany').value,
+    dealerName: isProspect ? null : document.getElementById('fName').value,
     city: isProspect ? document.getElementById('pCity').value : document.getElementById('fCity').value,
     state: isProspect ? document.getElementById('pState').value : document.getElementById('fState').value,
     email: isProspect ? document.getElementById('pEmail').value : document.getElementById('fEmail').value,
