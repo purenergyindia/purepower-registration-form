@@ -442,7 +442,7 @@
 
       <div id="attendeeList"></div>
 
-      <div class="field-error" id="step3Error">Please enter Attendee 1's name, a valid 10-digit mobile number, and a valid email address.</div>
+      <div class="field-error" id="step3Error">Please enter a name, a valid 10-digit mobile number, and a valid email address for every attendee.</div>
 
       <div class="btn-row">
         <button class="btn-ghost" onclick="goStep(2)">Back</button>
@@ -734,14 +734,19 @@ function renderAttendees(count){
     block.innerHTML = `
       <div class="idx">Attendee ${i}</div>
       <div class="grid2">
-        <div><label>Guest Name ${i===1?'<span class="req">*</span>':''}</label><input type="text" class="att-name" data-idx="${i}"></div>
+        <div><label>Guest Name <span class="req">*</span></label><input type="text" class="att-name" data-idx="${i}"></div>
         <div>
-          <label>Mobile Number ${i===1?'<span class="req">*</span>':''}</label>
+          <label>Mobile Number <span class="req">*</span></label>
           <input type="tel" class="att-mobile" data-idx="${i}" maxlength="10">
           <div class="field-error att-mobile-error" data-idx="${i}">Enter a valid 10-digit mobile number</div>
         </div>
       </div>
-      ${includeEmail ? `<label>Email ID ${i===1?'<span class="req">*</span>':''}</label><input type="email" class="att-email" data-idx="${i}"><div class="field-error att-email-error" data-idx="${i}">Enter a valid email address</div>` : ''}`;
+      ${includeEmail ? `<label>Email ID <span class="req">*</span></label><input type="email" class="att-email" data-idx="${i}"><div class="field-error att-email-error" data-idx="${i}">Enter a valid email address</div>` : ''}
+      <label>Dietary Preference <span class="hint">(for lunch headcount)</span></label>
+      <select class="att-diet" data-idx="${i}">
+        <option value="Veg">Vegetarian</option>
+        <option value="Non-Veg">Non-Vegetarian</option>
+      </select>`;
     list.appendChild(block);
   }
   list.querySelectorAll('.att-mobile').forEach(inp=>{
@@ -767,7 +772,7 @@ function validateStep3(){
   let valid = true;
   const step3Error = document.getElementById('step3Error');
 
-  blocks.forEach((b, idx) => {
+  blocks.forEach((b) => {
     const nameInput = b.querySelector('.att-name');
     const mobileInput = b.querySelector('.att-mobile');
     const mobileErr = b.querySelector('.att-mobile-error');
@@ -778,7 +783,6 @@ function validateStep3(){
     const email = emailInput ? emailInput.value.trim() : '';
     const mobileOk = /^[0-9]{10}$/.test(mobile);
     const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    const isFirst = idx === 0;
 
     nameInput.classList.remove('invalid');
     mobileInput.classList.remove('invalid');
@@ -786,17 +790,11 @@ function validateStep3(){
     if(emailInput) emailInput.classList.remove('invalid');
     if(emailErr) emailErr.classList.remove('show');
 
-    if(isFirst){
-      // Attendee 1 is mandatory: name + valid mobile + valid email required.
-      if(!name){ nameInput.classList.add('invalid'); valid = false; }
-      if(!mobileOk){ mobileInput.classList.add('invalid'); if(mobileErr) mobileErr.classList.add('show'); valid = false; }
-      if(emailInput && !emailOk){ emailInput.classList.add('invalid'); if(emailErr) emailErr.classList.add('show'); valid = false; }
-    } else if(name || mobile || email){
-      // Additional attendees are optional, but if someone starts filling
-      // one in, their mobile number and email still have to be valid.
-      if(!mobileOk){ mobileInput.classList.add('invalid'); if(mobileErr) mobileErr.classList.add('show'); valid = false; }
-      if(emailInput && !emailOk){ emailInput.classList.add('invalid'); if(emailErr) emailErr.classList.add('show'); valid = false; }
-    }
+    // Every attendee up to the number selected in "Number of Attendees" is
+    // mandatory — name, a valid mobile number, and a valid email are all required.
+    if(!name){ nameInput.classList.add('invalid'); valid = false; }
+    if(!mobileOk){ mobileInput.classList.add('invalid'); if(mobileErr) mobileErr.classList.add('show'); valid = false; }
+    if(emailInput && !emailOk){ emailInput.classList.add('invalid'); if(emailErr) emailErr.classList.add('show'); valid = false; }
   });
 
   step3Error.classList.toggle('show', !valid);
@@ -817,7 +815,10 @@ function prepStep4(){
   const stateVal = isProspect ? document.getElementById('pState').value : document.getElementById('fState').value;
   const code = isProspect ? '—' : document.getElementById('dealerCode').value.toUpperCase();
   const attendeeSummaries = Array.from(document.querySelectorAll('.attendee-block')).map(b=>{
-    return b.querySelector('.att-name').value.trim();
+    const name = b.querySelector('.att-name').value.trim();
+    const dietSel = b.querySelector('.att-diet');
+    const dietLabel = dietSel ? dietSel.options[dietSel.selectedIndex].text : '';
+    return name ? (name + ' (' + dietLabel + ')') : '';
   }).filter(Boolean);
 
   const rows = [
@@ -877,6 +878,7 @@ function flattenPayload(payload){
         flat['attendee' + (i+1) + '_name']   = att.name   || '';
         flat['attendee' + (i+1) + '_mobile'] = att.mobile || '';
         flat['attendee' + (i+1) + '_email']  = att.email  || '';
+        flat['attendee' + (i+1) + '_diet']   = att.diet   || '';
       });
     } else if(k === 'businessProspect' && v){
       Object.keys(v).forEach(bk=>{
@@ -923,7 +925,8 @@ function submitForm(){
     attendees: Array.from(document.querySelectorAll('.attendee-block')).map(b=>({
       name: b.querySelector('.att-name').value,
       mobile: b.querySelector('.att-mobile').value,
-      email: b.querySelector('.att-email') ? b.querySelector('.att-email').value : null
+      email: b.querySelector('.att-email') ? b.querySelector('.att-email').value : null,
+      diet: b.querySelector('.att-diet') ? b.querySelector('.att-diet').value : null
     })),
     businessProspect: isProspect ? {
       alreadyApplied: state.applied || null,
