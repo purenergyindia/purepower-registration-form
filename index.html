@@ -506,7 +506,7 @@ const SEAT_LIMIT = {
   "Dealer": 2,
   "Authorised Retailer": 1,
   "Business Associate": 1,
-  "Cash & Carry": 1
+  "Cash & Carry": 4
 };
 
 let state = {
@@ -680,7 +680,7 @@ function lookupDealerCode(val, seq){
       if(data.found && data.record){
         const match = data.record;
         status.className = 'verify-status ok';
-        status.innerHTML = '<span class="dot-pulse ok"></span><span>Verified — ' + match.company + ' (' + match.type + ')</span>';
+        status.innerHTML = '<span class="dot-pulse ok"></span><span>Verified — ' + match.company + '</span>';
         document.getElementById('fCompany').value = match.company;
         document.getElementById('fCity').value = match.city;
         document.getElementById('fState').value = match.state;
