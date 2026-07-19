@@ -870,7 +870,7 @@ function checkSubmitEnabled(){
 // PASTE YOUR APPS SCRIPT WEB APP URL HERE (ends in /exec)
 // See the accompanying Apps_Script_Code.gs for the backend.
 // ============================================================
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwHXjk0hNO9aGwWNWCcj1WXMfDOerWVhOZK9AuytVHwxkvaioMAGYWMRZL7k44_liv5/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzw2RoRHXeH9gFizWP1BFWfvU4XN45nqCTKKxWjHvFuoKrdE-rQcRLqzH82xWB62xHA/exec";
 
 // Flattens the nested payload into simple key:value pairs so each
 // value maps cleanly to one named column in the Sheet — no arrays,
@@ -924,6 +924,7 @@ function submitForm(){
     dealerCode: isProspect ? null : document.getElementById('dealerCode').value.toUpperCase(),
     company: isProspect ? document.getElementById('pCompany').value : document.getElementById('fCompany').value,
     dealerName: isProspect ? null : document.getElementById('fName').value,
+    additionalEmails: (isProspect || !state.matchedRecord) ? null : (state.matchedRecord.additionalEmails || null),
     city: isProspect ? document.getElementById('pCity').value : document.getElementById('fCity').value,
     state: isProspect ? document.getElementById('pState').value : document.getElementById('fState').value,
     email: isProspect ? document.getElementById('pEmail').value : document.getElementById('fEmail').value,
