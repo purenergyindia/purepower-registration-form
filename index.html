@@ -335,7 +335,7 @@
     <div class="card" id="step2" style="display:none;">
       <div class="step-tag">Step 2</div>
       <h2 id="step2Title">Confirm Your Partner Details</h2>
-      <p class="desc" id="step2Desc">Enter your Channel Partner Code — your firm's details will be pulled up automatically.</p>
+      <p class="desc" id="step2Desc">Enter your Channel Partner Code (Dealer/Distributor Code/Authorised Retailer Code) to auto-fill your form details.</p>
 
       <div id="codeSection">
         <label id="dealerCodeLabel">Channel Partner Code <span class="req">*</span></label>
@@ -344,7 +344,7 @@
         </div>
         <div class="verify-status idle" id="verifyStatus">
           <span class="dot-pulse" style="background:var(--ink-soft);"></span>
-          <span>Enter your Channel Partner Code to auto-fill your firm's details</span>
+          <span>Enter your Channel Partner Code (Dealer/Distributor Code/Authorised Retailer Code) to auto-fill your form details</span>
         </div>
       </div>
 
@@ -583,13 +583,13 @@ function prepStep2(){
   document.getElementById('dealerCodeLabel').innerHTML = codeLabel + ' <span class="req">*</span>';
   document.getElementById('step2Desc').innerText = isAssociate
     ? 'Since you are not yet an authorized partner, enter your business details manually.'
-    : 'Enter your ' + codeLabel + ' — your firm details will be pulled up automatically.';
+    : 'Enter your ' + codeLabel + ' (Dealer/Distributor Code/Authorised Retailer Code) to auto-fill your form details.';
 
   if(!isAssociate){
     document.getElementById('dealerCode').value = '';
     const status = document.getElementById('verifyStatus');
     status.className = 'verify-status idle';
-    status.innerHTML = '<span class="dot-pulse" style="background:var(--ink-soft);"></span><span>Enter your ' + codeLabel + ' to auto-fill your firm details</span>';
+    status.innerHTML = '<span class="dot-pulse" style="background:var(--ink-soft);"></span><span>Enter your ' + codeLabel + ' (Dealer/Distributor Code/Authorised Retailer Code) to auto-fill your form details</span>';
   }
 
   document.getElementById('step2Next').disabled = true;
@@ -653,7 +653,7 @@ document.getElementById('dealerCode').addEventListener('input', function(e){
 
   if(val.length < 5){
     status.className = 'verify-status idle';
-    status.innerHTML = '<span class="dot-pulse" style="background:var(--ink-soft);"></span><span>Enter your ' + getCodeLabel() + ' to auto-fill your firm details</span>';
+    status.innerHTML = '<span class="dot-pulse" style="background:var(--ink-soft);"></span><span>Enter your ' + getCodeLabel() + ' (Dealer/Distributor Code/Authorised Retailer Code) to auto-fill your form details</span>';
     panel.classList.remove('show');
     return;
   }
@@ -697,7 +697,7 @@ function lookupDealerCode(val, seq){
         state.partnerType = match.type;
       } else {
         status.className = 'verify-status idle';
-        status.innerHTML = '<span class="dot-pulse" style="background:var(--ink-soft);"></span><span>Enter your ' + getCodeLabel() + ' to auto-fill your firm details</span>';
+        status.innerHTML = '<span class="dot-pulse" style="background:var(--ink-soft);"></span><span>Enter your ' + getCodeLabel() + ' (Dealer/Distributor Code/Authorised Retailer Code) to auto-fill your form details</span>';
         panel.classList.remove('show');
         nextBtn.disabled = true;
         state.matchedRecord = null;
